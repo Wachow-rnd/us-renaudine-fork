@@ -1,6 +1,6 @@
 import React, { Suspense, lazy, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { AuthProvider } from "./context/Authcontext";
+import { StaticAuthProvider } from "./context/StaticAuthContext";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import "./styles/index.css";
@@ -48,26 +48,24 @@ const LoadingFallback = () => (
 
 export default function App() {
   return (
-    <AuthProvider>
-      <Router>
-        <Header />
-        <main id="main-content">
-          <Suspense fallback={<LoadingFallback />}>
-            <Routes>
-              <Route path="/" element={<Accueil />} />
-              <Route path="/club" element={<Club />} />
-              <Route path="/evenements" element={<Evenements />} />
-              <Route path="/galerie" element={<Galerie />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/gestion" element={<Gestion />} />
-              <Route path="/membres" element={<ListeMembres />} />
-              <Route path="/sponsors" element={<Sponsors />} />
-            </Routes>
-          </Suspense>
-        </main>
-        <Footer />
-      </Router>
-    </AuthProvider>
+    <Router basename="/us-renaudine-fork">
+      <Header />
+      <main id="main-content">
+        <Suspense fallback={<LoadingFallback />}>
+          <Routes>
+            <Route path="/" element={<Accueil />} />
+            <Route path="/club" element={<Club />} />
+            <Route path="/evenements" element={<Evenements />} />
+            <Route path="/galerie" element={<Galerie />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/gestion" element={<Gestion />} />
+            <Route path="/membres" element={<ListeMembres />} />
+            <Route path="/sponsors" element={<Sponsors />} />
+          </Routes>
+        </Suspense>
+      </main>
+      <Footer />
+    </Router>
   );
 }
