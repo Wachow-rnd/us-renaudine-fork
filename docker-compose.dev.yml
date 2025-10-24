@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  # Application principale (optionnel, pour un déploiement containerisé)
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+      - "4000:4000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - SECRET_JWT=dev_secret_jwt_key_change_in_production
+      - PORT=4000
+      - INIT_ADMIN_USER=admin
+      - INIT_ADMIN_PASS=admin123
+    profiles:
+      - full-stack
+
+  # Base de données pour les tests (optionnel)
+  test-db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: us_renaudine_test
+      POSTGRES_USER: test_user
+      POSTGRES_PASSWORD: test_password
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_test_data:/var/lib/postgresql/data
+    profiles:
+      - testing
+
+  # Service de développement avec hot-reload (optionnel)
+  dev:
+    image: node:18-alpine
+    working_dir: /app
+    volumes:
+      - .:/app
+      - /app/node_modules
+    ports:
+      - "5173:5173"
+      - "4000:4000"
+    command: npm start
+    environment:
+      - NODE_ENV=development
+    profiles:
+      - development
+
+volumes:
+  postgres_test_data:
+
+# Utilisation :
+# docker-compose -f docker-compose.dev.yml --profile development up
+# docker-compose -f docker-compose.dev.yml --profile testing up test-db
