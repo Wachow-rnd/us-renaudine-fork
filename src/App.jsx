@@ -47,8 +47,11 @@ const LoadingFallback = () => (
 );
 
 export default function App() {
+  // Détection de l'environnement
+  const basename = import.meta.env.MODE === 'development' ? '/' : '/us-renaudine-fork';
+  
   return (
-    <Router basename="/us-renaudine-fork">
+    <Router basename={basename}>
       <Header />
       <main id="main-content">
         <Suspense fallback={<LoadingFallback />}>
